@@ -37,9 +37,11 @@
 </head>
 <body>
     <div class="relative overflow-x-auto p-8 md:px-64">
+        <!-- 제목 및 설명 -->
         <p class="text-2xl md:text-3xl italic font-bitbit">Karaoke (a.k.a 오타쿠 노래방 리스트)</p>
         <p class="text-base pb-4 font-sans">문의: luke@yclk.me</p>
 
+        <!-- Nav Bar -->
         <div class="mb-4">
             <ul class="flex">
                 <li class="mr-3">
@@ -54,22 +56,51 @@
             </ul>
         </div>
 
+        <!-- 테이블 -->
         <table class="table-auto w-full border-collapse text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
             <thead class="text-gray-800 bg-gray-200">
                 <tr>
                     <th scope="title" class="py-3">제목</td>
                     <th scope="artist" class="py-3">아티스트</td>
-                    <th scope="genre" class="py-3">종류</th>
-                    <th scope="genre" class="py-3">삭제</th>
+                    <th scope="karaoke" class="py-3 w-8">🎤</td>
+                    <th scope="index" class="py-3 w-20">번호</td>
+                    <th scope="genre" class="py-3 w-20">종류</th>
+                    <th scope="edit" class="py-3 w-16">수정</th>
+                    <th scope="delete" class="py-3 w-16">삭제</th>
                 </tr>
             </thead>
             <tbody>
                 {% for i in kList %}
                     <tr class="border-b">
+                        <form action="/edit/{{ i['_id'] }}" method="POST">
+                            <td class="p-2">
+                                <input class="w-full" type="text" name="title" value="{{ i['title'] }}">
+                            </td>
+                            <td class="p-2">
+                                <input class="w-full" type="text" name="artist" value="{{ i['artist'] }}">
+                            </td>
+                            <td class="p-2">
+                                <input class="w-full" type="text" name="karaoke1" value="{{ i['karaoke'] }}">
+                            </td>
+                            <td class="p-2">
+                                <input class="w-full" type="text" name="number" value="{{ i['number'] }}">
+                            </td>
+                            <td class="p-2">
+                                <input class="w-full" type="text" name="categories" value="{{ i['categories'] }}">
+                            </td>
+                            <td class="p-2 bg-blue-100">
+                                <button type="submit" class="text-blue-600 font-bold hover:underline">수정</button>
+                            </td>
+                        </form>
+                        <td class="p-2 bg-red-100">
+                            <a href="/delete/{{ i['_id'] }}" class="text-red-600 font-bold hover:underline">삭제</a>
+                        </td>
+
+                        <!-- <td class="p-2 bg-blue-100"><a href="/edit/{{i['_id']}}">수정</a></td>
                         <td class="p-2">{{i['title']}}</td>
                         <td class="p-2">{{i['artist']}}</td>
                         <td class="p-2">{{i['categories']}}</td>
-                        <td class="p-2 bg-red-100"><a href="/delete/{{i['_id']}}">삭제</a></td>
+                        <td class="p-2 bg-red-100"><a href="/delete/{{i['_id']}}">삭제</a></td> -->
                     </tr>
                 {% endfor %}
             </tbody>

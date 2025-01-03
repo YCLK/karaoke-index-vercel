@@ -10,10 +10,12 @@ app = Flask(__name__)    #플라스크 객체(서버) 생성
 app.config["MONGO_URI"] = "mongodb+srv://admin:1234@cluster0.e1str.mongodb.net/karaoke?"
 mongo = PyMongo(app)     #mongo 변수를 통해 DB(myweb)에 접근 가능
 
+# html 페이지 렌더 ------------------------------------------------------------------------------
+
 @app.route("/")    #라우트는 데코레이터(@)와 함수를 활용하여 구현됨, "/"은 루트 경로
 def index():
     index = mongo.db.karaoke
-    kList = index.find()
+    kList = index.find().sort('title', 1)
     
     return render_template('index.html', kList=kList)
     #플라스크 서버 실행
@@ -25,9 +27,10 @@ def add():
 @app.route("/manage/")    #라우트는 데코레이터(@)와 함수를 활용하여 구현됨, "/"은 루트 경로
 def manage():
     index = mongo.db.karaoke
-    kList = index.find()
-
+    kList = index.find().sort('title', 1)
     return render_template('manage.html', kList=kList)
+
+# 요청 처리 --------------------------------------------------------------------------------------
 
 @app.route("/karaoke", methods=["POST"])   #POST 요청 처리를 위해 필요한 속성
 def karaoke():    
@@ -44,12 +47,29 @@ def karaoke():
     
     return redirect('/')
 
+@app.route("/edit/<id>", methods=["POST"])
+def edit_karaoke(id):
+    title = request.form.get("title")
+    artist = request.form.get("artist")
+    karaoke1 = request.form.get("karaoke1") 
+    number = request.form.get("number")
+    categories = request.form.get("categories")
+
+    updated_data = { "title" : title, "artist" : artist, "karaoke" : karaoke1, "number" : number, "categories" : categories }
+
+    karaoke = mongo.db.karaoke
+    karaoke.update_one({"_id": ObjectId(id)}, {"$set": updated_data})
+
+    return redirect('/manage/')
+
 @app.route("/delete/<idx>")    # 팬시(간편, clean) URL 형식
 def delete(idx):
     karaoke = mongo.db.karaoke
     karaoke.delete_one({"_id":ObjectId(idx)}) 
     
-    return redirect('/')
+    return redirect('/manage/')
+
+# -------------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":    #파이썬의 엔트리 포인트(직접 실행된 파일에서만 True)
     app.run(debug=True)
