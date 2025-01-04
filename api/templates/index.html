@@ -19,24 +19,27 @@
         }
     </style>
     <script>
-    tailwind.config = {
-        theme: {
-        extend: {
-            fontFamily: {
-                sans: ["Pretendard-Regular", "sans-serif"], 
-                bitbit: ["DNFBitBitv2"]
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Pretendard-Regular", "sans-serif"], 
+                        bitbit: ["DNFBitBitv2"]
+                    },
+                    
+                    screens: {
+                        'se': '380px',
+                        // => @media (min-width: 380px) { ... }
+                    },
+                },
             },
-            colors: {
-            clifford: '#da373d',
-            }
         }
-        }
-    }
     </script>
     <title>카라오케 - 오타쿠 노래방 리스트</title>
 </head>
 <body>
-    <div class="relative overflow-x-auto p-8 md:px-64">
+    <!-- md:px-64 -->
+    <div class="relative overflow-x-auto p-8 lg:px-64">
 
         <p class="text-2xl md:text-3xl italic font-bitbit">Karaoke (a.k.a 오타쿠 노래방 리스트)</p>
         <p class="text-base pb-4 font-sans">문의: luke@yclk.me</p>
@@ -55,12 +58,12 @@
             </ul>
         </div>
 
-        <table class="table-auto w-full border-collapse text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
+        <table class="table-auto w-full border-collapse text-xs se:text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
             <thead class="text-gray-800 bg-gray-200">
                 <tr>
                     <th scope="title" class="py-3">제목</td>
                     <th scope="artist" class="py-3">아티스트</td>
-                    <th scope="karaoke" class="py-3">🎤</td>
+                    <th scope="karaoke" class="py-3 hidden sm:table-cell">🎤</td>
                     <th scope="index" class="py-3">번호</td>
                     <th scope="genre" class="py-3">종류</th>
                 </tr>
@@ -68,11 +71,11 @@
             <tbody>
                 {% for i in kList %}
                     <tr class="border-b">
-                        <td class="p-2">{{i['title']}}</td>
-                        <td class="p-2">{{i['artist']}}</td>
-                        <td class="p-2">{{i['karaoke']}}</td>
-                        <td class="p-2">{{i['number']}}</td>
-                        <td class="p-2">{{i['categories']}}</td>
+                        <td class="p-2 break-words">{{i['title']}}</td>
+                        <td class="p-2 break-words">{{i['artist']}}</td>
+                        <td class="p-2 break-words hidden sm:table-cell">{{i['karaoke']}}</td>
+                        <td class="p-2 break-words">{{i['number']}}</td>
+                        <td class="p-2 break-words">{{i['categories']}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -19,24 +19,26 @@
         }
     </style>
     <script>
-    tailwind.config = {
-        theme: {
-        extend: {
-            fontFamily: {
-                sans: ["Pretendard-Regular", "sans-serif"], 
-                bitbit: ["DNFBitBitv2"]
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Pretendard-Regular", "sans-serif"], 
+                        bitbit: ["DNFBitBitv2"]
+                    },
+                    
+                    screens: {
+                        'se': '380px',
+                        // => @media (min-width: 380px) { ... }
+                    },
+                },
             },
-            colors: {
-            clifford: '#da373d',
-            }
         }
-        }
-    }
     </script>
     <title>카라오케 - 오타쿠 노래방 리스트</title>
 </head>
 <body>
-    <div class="relative overflow-x-auto p-8 md:px-64">
+    <div class="relative overflow-x-auto p-8 lg:px-64">
         <!-- 제목 및 설명 -->
         <p class="text-2xl md:text-3xl italic font-bitbit">Karaoke (a.k.a 오타쿠 노래방 리스트)</p>
         <p class="text-base pb-4 font-sans">문의: luke@yclk.me</p>
@@ -72,7 +74,7 @@
             <tbody>
                 {% for i in kList %}
                     <tr class="border-b">
-                        <form action="/edit/{{ i['_id'] }}" method="POST">
+                        <form method="POST" action="/edit/{{ i['_id'] }}">
                             <td class="p-2">
                                 <input class="w-full" type="text" name="title" value="{{ i['title'] }}">
                             </td>
@@ -80,18 +82,27 @@
                                 <input class="w-full" type="text" name="artist" value="{{ i['artist'] }}">
                             </td>
                             <td class="p-2">
-                                <input class="w-full" type="text" name="karaoke1" value="{{ i['karaoke'] }}">
+                                <select class="w-full" name="karaoke_info">
+                                    <option value="TJ" {% if i['karaoke'] == 'TJ' %}selected{% endif %}>TJ</option>
+                                    <option value="KY" {% if i['karaoke'] == 'KY' %}selected{% endif %}>KY</option>
+                                </select>
                             </td>
                             <td class="p-2">
-                                <input class="w-full" type="text" name="number" value="{{ i['number'] }}">
+                                <input class="w-full" type="number" name="number" value="{{ i['number'] }}">
                             </td>
                             <td class="p-2">
-                                <input class="w-full" type="text" name="categories" value="{{ i['categories'] }}">
+                                <select class="w-full" name="categories">
+                                    <option value="보카로" {% if i['categories'] == '보카로' %}selected{% endif %}>보카로</option>
+                                    <option value="KPOP" {% if i['categories'] == 'KPOP' %}selected{% endif %}>KPOP</option>
+                                    <option value="JPOP" {% if i['categories'] == 'JPOP' %}selected{% endif %}>JPOP</option>
+                                    <option value="JROCK" {% if i['categories'] == 'JROCK' %}selected{% endif %}>JROCK</option>
+                                </select>
                             </td>
                             <td class="p-2 bg-blue-100">
                                 <button type="submit" class="text-blue-600 font-bold hover:underline">수정</button>
                             </td>
                         </form>
+
                         <td class="p-2 bg-red-100">
                             <a href="/delete/{{ i['_id'] }}" class="text-red-600 font-bold hover:underline">삭제</a>
                         </td>

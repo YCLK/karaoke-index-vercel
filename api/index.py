@@ -51,11 +51,11 @@ def karaoke():
 def edit_karaoke(id):
     title = request.form.get("title")
     artist = request.form.get("artist")
-    karaoke1 = request.form.get("karaoke1") 
+    karaoke_info = request.form.get("karaoke_info")
     number = request.form.get("number")
     categories = request.form.get("categories")
 
-    updated_data = { "title" : title, "artist" : artist, "karaoke" : karaoke1, "number" : number, "categories" : categories }
+    updated_data = { "title" : title, "artist" : artist, "karaoke" : karaoke_info, "number" : number, "categories" : categories }
 
     karaoke = mongo.db.karaoke
     karaoke.update_one({"_id": ObjectId(id)}, {"$set": updated_data})
