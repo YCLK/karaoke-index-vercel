@@ -1,13 +1,18 @@
-from flask import Flask
+from flask import Flask # pip install flask
 from flask import render_template
 from flask import request            #브라우저의 요청을 처리하기 위한 클래스
 from flask import redirect            #인자로 전달된 주소(라우트) 호출
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo # pip install flask-pymongo
 from bson.objectid import ObjectId
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)    #플라스크 객체(서버) 생성
 
-app.config["MONGO_URI"] = "mongodb+srv://admin:1234@cluster0.e1str.mongodb.net/karaoke?"
+load_dotenv()
+MONGODB_URL = os.getenv("MONGODB_URL")
+
+app.config["MONGO_URI"] = MONGODB_URL
 mongo = PyMongo(app)     #mongo 변수를 통해 DB(myweb)에 접근 가능
 
 # html 페이지 렌더 ------------------------------------------------------------------------------
