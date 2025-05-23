@@ -73,8 +73,3 @@ def delete(idx):
     karaoke.delete_one({"_id":ObjectId(idx)}) 
     
     return redirect('/manage/')
-
-# -------------------------------------------------------------------------------------------------
-
-if __name__ == "__main__":    #파이썬의 엔트리 포인트(직접 실행된 파일에서만 True)
-    app.run(debug=True)
