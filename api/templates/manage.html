@@ -73,7 +73,7 @@
             </thead>
             <tbody>
                 {% for i in kList %}
-                    <tr class="border-b">
+                    <!-- <tr class="border-b">
                         <form method="POST" action="/edit/{{ i['_id'] }}">
                             <td class="p-2">
                                 <input class="w-full" type="text" name="title" value="{{ i['title'] }}">
@@ -111,8 +111,8 @@
                         <td class="p-2">{{i['title']}}</td>
                         <td class="p-2">{{i['artist']}}</td>
                         <td class="p-2">{{i['categories']}}</td>
-                        <td class="p-2 bg-red-100"><a href="/delete/{{i['_id']}}">삭제</a></td> -->
-                    </tr>
+                        <td class="p-2 bg-red-100"><a href="/delete/{{i['_id']}}">삭제</a></td>
+                    </tr> -->
                 {% endfor %}
             </tbody>
         </table>
