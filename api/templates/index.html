@@ -58,11 +58,11 @@
         <table class="table-fixed w-full border-collapse text-xs se:text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
             <thead class="text-gray-800 bg-gray-200">
                 <tr>
-                    <th scope="title" class="py-3">제목</td>
-                    <th scope="artist" class="py-3">아티스트</td>
-                    <th scope="karaoke" class="py-3 hidden sm:table-cell">🎤</td>
-                    <th scope="index" class="py-3">번호</td>
-                    <th scope="genre" class="py-3">종류</th>
+                    <th scope="title" class="py-3 w-[35%] sm:w-[30%]">제목</td>
+                    <th scope="artist" class="py-3 w-[25%] sm:w-[25%]">아티스트</td>
+                    <th scope="karaoke" class="py-3 hidden sm:table-cell sm:w-[10%]">🎤</td>
+                    <th scope="index" class="py-3 w-[20%] sm:w-[17%]">번호</td>
+                    <th scope="genre" class="py-3 w-[20%] sm:w-[18%]">종류</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,7 +71,7 @@
                         <td class="p-2 break-all">{{i['title']}}</td>
                         <td class="p-2 break-all">{{i['artist']}}</td>
                         <td class="p-2 break-all hidden sm:table-cell">{{i['karaoke']}}</td>
-                        <td class="p-2 break-all">{{i['number']}}</td>
+                        <td class="p-2">{{i['number']}}</td>
                         <td class="p-2 break-all">{{i['categories']}}</td>
                     </tr>
                 {% endfor %}
