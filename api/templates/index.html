@@ -39,7 +39,7 @@
 </head>
 <body class="overflow-x-hidden">
     <!-- md:px-64 -->
-    <div class="relative p-8 lg:px-64 max-w-full">
+    <div class="relative p-8 lg:px-64 max-w-full box-border">
         <p class="text-2xl md:text-3xl italic font-bitbit">Karaoke (a.k.a 오타쿠 노래방 리스트)</p>
         <p class="text-base pb-4 font-sans">문의: luke@yclk.me</p>
         <div class="mb-4">
@@ -55,30 +55,28 @@
                 </li> -->
             </ul>
         </div>
-        <div class="overflow-x-auto">
-            <table class="table-auto w-full border-collapse text-xs se:text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
-                <thead class="text-gray-800 bg-gray-200">
-                    <tr>
-                        <th scope="title" class="py-3">제목</td>
-                        <th scope="artist" class="py-3">아티스트</td>
-                        <th scope="karaoke" class="py-3 hidden sm:table-cell">🎤</td>
-                        <th scope="index" class="py-3">번호</td>
-                        <th scope="genre" class="py-3">종류</th>
+        <table class="table-fixed w-full border-collapse text-xs se:text-sm md:text-base text-center text-gray-800 font-sans shadow-xl">
+            <thead class="text-gray-800 bg-gray-200">
+                <tr>
+                    <th scope="title" class="py-3">제목</td>
+                    <th scope="artist" class="py-3">아티스트</td>
+                    <th scope="karaoke" class="py-3 hidden sm:table-cell">🎤</td>
+                    <th scope="index" class="py-3">번호</td>
+                    <th scope="genre" class="py-3">종류</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in kList %}
+                    <tr class="border-b">
+                        <td class="p-2 break-all">{{i['title']}}</td>
+                        <td class="p-2 break-all">{{i['artist']}}</td>
+                        <td class="p-2 break-all hidden sm:table-cell">{{i['karaoke']}}</td>
+                        <td class="p-2 break-all">{{i['number']}}</td>
+                        <td class="p-2 break-all">{{i['categories']}}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for i in kList %}
-                        <tr class="border-b">
-                            <td class="p-2 break-words">{{i['title']}}</td>
-                            <td class="p-2 break-words">{{i['artist']}}</td>
-                            <td class="p-2 break-words hidden sm:table-cell">{{i['karaoke']}}</td>
-                            <td class="p-2 break-words">{{i['number']}}</td>
-                            <td class="p-2 break-words">{{i['categories']}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
         <!-- COPY START
         <tr class="border-b">
             <td class="p-2"></td>
