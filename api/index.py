@@ -30,7 +30,7 @@ def manage():
         password = request.form.get("password")
         if password == MANAGE_PASSWORD:
             index = mongo.db.karaoke
-            kList = index.find().sort('title', 1)
+            kList = list(index.find().sort('title', 1))
             return render_template('manage.html', kList=kList)
         else:
             return render_template('manage_login.html', error="비밀번호가 일치하지 않습니다.")
@@ -68,3 +68,4 @@ def delete(idx):
     karaoke.delete_one({"_id":ObjectId(idx)}) 
     
     return redirect('/manage/')
+
