@@ -6,17 +6,13 @@ from flask_pymongo import PyMongo # pip install flask-pymongo
 from bson.objectid import ObjectId
 import os
 from dotenv import load_dotenv
-
 app = Flask(__name__)    #플라스크 객체(서버) 생성
-
 load_dotenv()
 MONGODB_URL = os.getenv("MONGODB_URL")
-
+MANAGE_PASSWORD = os.getenv("MANAGE_PASSWORD")
 app.config["MONGO_URI"] = MONGODB_URL
 mongo = PyMongo(app)     #mongo 변수를 통해 DB(myweb)에 접근 가능
-
 # html 페이지 렌더 ------------------------------------------------------------------------------
-
 @app.route("/")    #라우트는 데코레이터(@)와 함수를 활용하여 구현됨, "/"은 루트 경로
 def index():
     index = mongo.db.karaoke
@@ -24,19 +20,23 @@ def index():
     
     return render_template('index.html', kList=kList)
     #플라스크 서버 실행
-
 @app.route("/add/")    #라우트는 데코레이터(@)와 함수를 활용하여 구현됨, "/"은 루트 경로
 def add():
     return render_template('register.html')
 
-@app.route("/manage/")    #라우트는 데코레이터(@)와 함수를 활용하여 구현됨, "/"은 루트 경로
+@app.route("/manage/", methods=["GET", "POST"])
 def manage():
-    index = mongo.db.karaoke
-    kList = index.find().sort('title', 1)
-    return render_template('manage.html', kList=kList)
+    if request.method == "POST":
+        password = request.form.get("password")
+        if password == MANAGE_PASSWORD:
+            index = mongo.db.karaoke
+            kList = index.find().sort('title', 1)
+            return render_template('manage.html', kList=kList)
+        else:
+            return render_template('manage_login.html', error="비밀번호가 일치하지 않습니다.")
+    return render_template('manage_login.html', error=None)
 
 # 요청 처리 --------------------------------------------------------------------------------------
-
 @app.route("/karaoke", methods=["POST"])   #POST 요청 처리를 위해 필요한 속성
 def karaoke():    
     title = request.form.get("title") 
@@ -51,7 +51,6 @@ def karaoke():
     karaoke.insert_one(post)
     
     return redirect('/')
-
 @app.route("/edit/<id>", methods=["POST"])
 def edit_karaoke(id):
     title = request.form.get("title")
@@ -59,14 +58,10 @@ def edit_karaoke(id):
     karaoke_info = request.form.get("karaoke_info")
     number = request.form.get("number")
     categories = request.form.get("categories")
-
     updated_data = { "title" : title, "artist" : artist, "karaoke" : karaoke_info, "number" : number, "categories" : categories }
-
     karaoke = mongo.db.karaoke
     karaoke.update_one({"_id": ObjectId(id)}, {"$set": updated_data})
-
     return redirect('/manage/')
-
 @app.route("/delete/<idx>")    # 팬시(간편, clean) URL 형식
 def delete(idx):
     karaoke = mongo.db.karaoke
