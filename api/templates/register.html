@@ -57,6 +57,28 @@
 
         <div>
             <form method="POST" action="/karaoke" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                
+                <!-- 곡 번호 자동 검색 섹션 -->
+                <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <label class="block text-blue-700 text-m font-bold mb-2">🔍 TJ 곡 번호로 자동 검색</label>
+                    <div class="flex gap-2">
+                        <input 
+                            id="search-number" 
+                            type="text" 
+                            placeholder="TJ 곡 번호 입력 (예: 27527)" 
+                            class="shadow appearance-none border rounded flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                        >
+                        <button 
+                            type="button" 
+                            id="search-btn"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                        >
+                            검색
+                        </button>
+                    </div>
+                    <p id="search-status" class="text-sm mt-2 text-gray-500"></p>
+                </div>
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-m font-bold mb-2" for="제목">제목</label>
                     <input id="title" type="text" name="title" placeholder="제목" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -78,7 +100,7 @@
                         <label class="block text-gray-700 text-m font-bold mb-2" for="노래방">노래방</label>
                         <div class="inline-block relative w-full">
                             <select
-                            name="karaoke1" class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                            name="karaoke1" id="karaoke1" class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                                 <option>TJ</option>
                                 <option>KY</option>
                             </select>
@@ -112,6 +134,59 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', searchSong);
+        document.getElementById('search-number').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchSong();
+            }
+        });
+
+        async function searchSong() {
+            const songNumber = document.getElementById('search-number').value.trim();
+            const statusEl = document.getElementById('search-status');
+            const searchBtn = document.getElementById('search-btn');
+            
+            if (!songNumber) {
+                statusEl.textContent = '⚠️ 곡 번호를 입력해주세요.';
+                statusEl.className = 'text-sm mt-2 text-yellow-600';
+                return;
+            }
+
+            // 로딩 상태
+            searchBtn.disabled = true;
+            searchBtn.textContent = '검색 중...';
+            statusEl.textContent = '🔄 곡 정보를 가져오는 중...';
+            statusEl.className = 'text-sm mt-2 text-blue-500';
+
+            try {
+                const response = await fetch(`/api/tj-song/${songNumber}`);
+                const data = await response.json();
+
+                if (data.success && data.song) {
+                    // 폼 필드 자동 채우기
+                    document.getElementById('title').value = data.song.title || '';
+                    document.getElementById('artist').value = data.song.artist || '';
+                    document.getElementById('number').value = data.song.number || songNumber;
+                    document.getElementById('karaoke1').value = 'TJ';
+                    
+                    statusEl.textContent = `✅ "${data.song.title}" - ${data.song.artist}`;
+                    statusEl.className = 'text-sm mt-2 text-green-600';
+                } else {
+                    statusEl.textContent = '❌ 해당 번호의 곡을 찾을 수 없습니다.';
+                    statusEl.className = 'text-sm mt-2 text-red-500';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusEl.textContent = '❌ 검색 중 오류가 발생했습니다.';
+                statusEl.className = 'text-sm mt-2 text-red-500';
+            } finally {
+                searchBtn.disabled = false;
+                searchBtn.textContent = '검색';
+            }
+        }
+    </script>
 </body>
 </html>
-
