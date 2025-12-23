@@ -6,6 +6,7 @@ from flask import jsonify
 from flask_pymongo import PyMongo # pip install flask-pymongo
 from bson.objectid import ObjectId
 import os
+import requests
 from dotenv import load_dotenv
 from flask import session  # 상단에 추가
 
@@ -77,7 +78,18 @@ def edit_karaoke(id):
 @app.route("/delete/<idx>")    # 팬시(간편, clean) URL 형식
 def delete(idx):
     karaoke = mongo.db.karaoke
-    karaoke.delete_one({"_id":ObjectId(idx)}) 
+    karaoke.delete_one({"_id":ObjectId(idx)})
+
+@app.route('/api/tj-song/<int:song_number>')
+def get_tj_song(song_number):
+    """TJ 노래방 API 프록시"""
+    try:
+        response = requests.get(f'https://tj.pcor.me/api/song/{song_number}', timeout=5)
+        data = response.json()
+        return jsonify(data)
+    except requests.RequestException as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
     
     return redirect('/manage/')
+
 
