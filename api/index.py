@@ -2,6 +2,7 @@ from flask import Flask # pip install flask
 from flask import render_template
 from flask import request            #브라우저의 요청을 처리하기 위한 클래스
 from flask import redirect            #인자로 전달된 주소(라우트) 호출
+from flask import jsonify
 from flask_pymongo import PyMongo # pip install flask-pymongo
 from bson.objectid import ObjectId
 import os
@@ -79,3 +80,4 @@ def delete(idx):
     karaoke.delete_one({"_id":ObjectId(idx)}) 
     
     return redirect('/manage/')
+
