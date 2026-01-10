@@ -61,17 +61,17 @@
                 <!-- 곡 번호 자동 검색 섹션 -->
                 <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <label class="block text-blue-700 text-m font-bold mb-2">🔍 TJ 곡 번호로 자동 검색</label>
-                    <div class="flex gap-2">
+                    <div class="flex flex-col sm:flex-row gap-2">
                         <input 
                             id="search-number" 
                             type="text" 
                             placeholder="TJ 곡 번호 입력 (예: 27527)" 
-                            class="shadow appearance-none border rounded flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                            class="shadow appearance-none border rounded w-full sm:flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
                         >
                         <button 
                             type="button" 
                             id="search-btn"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors w-full sm:w-auto"
                         >
                             검색
                         </button>
@@ -190,3 +190,4 @@
     </script>
 </body>
 </html>
+
