@@ -84,12 +84,40 @@ def delete(idx):
 def get_tj_song(song_number):
     """TJ 노래방 API 프록시"""
     try:
-        response = requests.get(f'https://tj.pcor.me/api/song/{song_number}', timeout=5)
-        data = response.json()
-        return jsonify(data)
+        response = requests.get(
+            f'http://www.tjmedia.co.kr/realmaster/xml_songsearch_new.asp',
+            params={
+                'page': 1,
+                'pagesize': 1,
+                'songtype': 1,
+                'songpart': 0,
+                'searchgubun': 5,
+                'searchtext': song_number,
+                'sortfield': 'title',
+                'sortgubun': 'asc'
+            },
+            timeout=5
+        )
+        response.encoding = 'utf-8'
+        
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(response.text)
+        
+        total_count = root.findtext('.//totalcount')
+        if not total_count or int(total_count) == 0:
+            return jsonify({'success': False, 'song': None})
+        
+        item = root.find('.//tj_data/item')
+        song = {
+            'number': int(item.findtext('songno')),
+            'title': item.findtext('songname'),
+            'artist': item.findtext('singer'),
+            'songType': item.findtext('songtype'),
+            'publishDate': item.findtext('publishdate'),
+        }
+        return jsonify({'success': True, 'song': song})
+    
     except requests.RequestException as e:
         return jsonify({'success': False, 'error': str(e)}), 500
-    
-    return redirect('/manage/')
-
-
+    except ET.ParseError as e:
+        return jsonify({'success': False, 'error': f'XML 파싱 오류: {str(e)}'}), 500
